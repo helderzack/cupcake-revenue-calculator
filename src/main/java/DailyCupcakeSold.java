@@ -2,11 +2,11 @@ package main.java;
 
 import java.time.LocalDate;
 
-public class DailyCupcakeSellItem {
+public class DailyCupcakeSold {
     private Double totalRevenue;
     private LocalDate dateOfCalculatedRevenue;
 
-    public DailyCupcakeSellItem(double totalRevenue, LocalDate dateOfCalculatedRevenue) {
+    public DailyCupcakeSold(double totalRevenue, LocalDate dateOfCalculatedRevenue) {
         this.totalRevenue = totalRevenue;
         this.dateOfCalculatedRevenue = dateOfCalculatedRevenue;
     }
