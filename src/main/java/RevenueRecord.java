@@ -35,13 +35,15 @@ public class RevenueRecord {
         }
     }
 
-    public List<DailyCupcakeSold> getDailyCupcakeSoldList() {
-        return dailyCupcakeSoldList;
-    }
-
-    public Double getYearlyRevenue(int year) {
+    public Double getAnnualRevenue(int year) {
         return dailyCupcakeSoldList.stream().
                 filter(dailySale -> dailySale.getDateOfCalculatedRevenue().getYear() == year).
+                map(dailySale -> dailySale.getTotalRevenue()).collect(Collectors.summingDouble(Double::doubleValue));
+    }
+
+    public Double getMonthlyRevenue(int year, int month) {
+        return dailyCupcakeSoldList.stream().
+                filter(dailySale -> dailySale.getDateOfCalculatedRevenue().getYear() == year && dailySale.getDateOfCalculatedRevenue().getMonthValue() == month).
                 map(dailySale -> dailySale.getTotalRevenue()).collect(Collectors.summingDouble(Double::doubleValue));
     }
 }
