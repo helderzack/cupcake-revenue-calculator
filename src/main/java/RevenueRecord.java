@@ -6,8 +6,10 @@ import java.io.FileReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class RevenueRecord {
@@ -38,32 +40,25 @@ public class RevenueRecord {
     public Double getAnnualRevenue(int year) {
         return dailyCupcakeSoldList.stream().
                 filter(dailySale -> dailySale.getDateOfCalculatedRevenue().getYear() == year).
-                map(dailySale -> dailySale.getTotalRevenue()).collect(Collectors.summingDouble(Double::doubleValue));
+                map(dailySale -> dailySale.getTotalRevenue()).
+                collect(Collectors.summingDouble(Double::doubleValue));
     }
 
     public Double getMonthlyRevenue(int year, int month) {
         return dailyCupcakeSoldList.stream().
-                filter(dailySale -> dailySale.getDateOfCalculatedRevenue().getYear() == year && dailySale.getDateOfCalculatedRevenue().getMonthValue() == month).
-                map(dailySale -> dailySale.getTotalRevenue()).collect(Collectors.summingDouble(Double::doubleValue));
+                filter(dailySale -> dailySale.getDateOfCalculatedRevenue().getYear() == year &&
+                        dailySale.getDateOfCalculatedRevenue().getMonthValue() == month).
+                map(dailySale -> dailySale.getTotalRevenue()).
+                collect(Collectors.summingDouble(Double::doubleValue));
     }
 
-    public List<Double> getWeeklyRevenue() {
-        int count = 1;
-        Double sum = Double.valueOf(0);
-        List<Double> weeklyRevenues = new ArrayList<>();
+    public Double getWeeklyRevenue(int year, int week) {
+        return dailyCupcakeSoldList.stream().
+                filter(dailySale -> dailySale.getDateOfCalculatedRevenue().getYear() == year &&
+                        dailySale.getDateOfCalculatedRevenue().get(WeekFields.of(Locale.US).weekOfYear()) == week).
+                map(dailySale -> dailySale.getTotalRevenue()).
+                collect(Collectors.summingDouble(Double::doubleValue));
 
-        for (int i = 0; i < dailyCupcakeSoldList.size(); i++) {
-            sum += dailyCupcakeSoldList.get(i).getTotalRevenue();
-            count++;
-
-            if (count > 7) {
-                weeklyRevenues.add(sum);
-                count = 1;
-                sum = Double.valueOf(0);
-            }
-        }
-
-        return weeklyRevenues;
     }
 
 }
