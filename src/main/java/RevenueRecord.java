@@ -46,4 +46,24 @@ public class RevenueRecord {
                 filter(dailySale -> dailySale.getDateOfCalculatedRevenue().getYear() == year && dailySale.getDateOfCalculatedRevenue().getMonthValue() == month).
                 map(dailySale -> dailySale.getTotalRevenue()).collect(Collectors.summingDouble(Double::doubleValue));
     }
+
+    public List<Double> getWeeklyRevenue() {
+        int count = 1;
+        Double sum = Double.valueOf(0);
+        List<Double> weeklyRevenues = new ArrayList<>();
+
+        for (int i = 0; i < dailyCupcakeSoldList.size(); i++) {
+            sum += dailyCupcakeSoldList.get(i).getTotalRevenue();
+            count++;
+
+            if (count > 7) {
+                weeklyRevenues.add(sum);
+                count = 1;
+                sum = Double.valueOf(0);
+            }
+        }
+
+        return weeklyRevenues;
+    }
+
 }
